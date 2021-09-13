@@ -1,14 +1,14 @@
 #include <ESP8266WiFi.h>
-#include <SFE_BMP180.h>
+//#include <SFE_BMP180.h>
 //#include <SPI.h>
 #include <Wire.h>
 #define T A0
 float vref = 3.3;
 float resolution = vref/1023; //1023 because it is a 10 bit ADC
 int Temperature;
-String apiKey = "SQ62IX8QFBALO4WR"; // Enter your Write API key from ThingSpeak
-const char *ssid = "Beautybell"; // replace with your wifi ssid and wpa2 key
-const char *pass = "alagumani007";
+String apiKey = ""; // Enter your Write API key from ThingSpeak
+const char *ssid = ""; // replace with your wifi ssid and wpa2 key
+const char *pass = "";
 const char* server = "api.thingspeak.com";
  
 WiFiClient client;
