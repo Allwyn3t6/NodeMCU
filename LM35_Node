@@ -1,0 +1,20 @@
+  #define T A0
+  float vref = 3.3;
+  float resolution = vref/1023; //1023 because it is a 10 bit ADC
+  int Temperature;
+void setup() {
+  // put your setup code here, to run once:
+pinMode(T, INPUT);
+Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+Serial.println("Raw value from sensor is:    ");
+Serial.println(analogRead(T));
+float Temperature = analogRead(T);
+Temperature = (Temperature * resolution)*100;
+Serial.println ("Temperature is: ");
+Serial.println(Temperature);
+delay (1000);
+}
