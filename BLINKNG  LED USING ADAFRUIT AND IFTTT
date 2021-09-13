@@ -2,19 +2,18 @@
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
 
-#define WIFI_SSID ""  // ENTER YOUR SSID
-#define WIFI_PASS "" // ENTER THE PASSWORD
+#define WIFI_SSID ""
+#define WIFI_PASS ""
 
 #define MQTT_SERV "io.adafruit.com"
 #define MQTT_PORT 1883
-#define MQTT_NAME "" //ENTER THE MQTT NAME
-#define MQTT_PASS "" //ENTER THE PASS KEY
+#define MQTT_NAME ""
+#define MQTT_PASS ""
 
 int led = D7;
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, MQTT_SERV, MQTT_PORT, MQTT_NAME, MQTT_PASS);
-
 Adafruit_MQTT_Subscribe onoff = Adafruit_MQTT_Subscribe(&mqtt, MQTT_NAME "/f/onoff");
 Adafruit_MQTT_Publish lightsStatus = Adafruit_MQTT_Publish(&mqtt, MQTT_NAME "/f/lightsStatus");
 
