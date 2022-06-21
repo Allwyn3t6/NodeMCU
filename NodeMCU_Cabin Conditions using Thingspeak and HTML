@@ -13,8 +13,8 @@ const int echoPin = 14;
 #include <DHT.h>
 
 
-const char* ssid = "Alls";   // your network SSID (name) 
-const char* password = "lalalaka";   // your network password
+const char* ssid = "xxxxxxxxxx";   // your network SSID (name) 
+const char* password = "yyyyyyyyy";   // your network password
 
 long duration;
 float distanceCm;
@@ -24,7 +24,7 @@ DHT dht;
 WiFiClient  client;
 
 unsigned long myChannelNumber = 1;
-const char * myWriteAPIKey = "FM5I0Y4QUOJM07P2";
+const char * myWriteAPIKey = "zzzzzzzzzzzz";
 
 // Timer variables
 unsigned long lastTime = 0;
