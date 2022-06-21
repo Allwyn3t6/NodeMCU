@@ -1,0 +1,107 @@
+/*********
+  Custom made by Dr.A.Allwyn for IoT workshop on Thingspeak
+*********/
+
+const int trigPin = 12;
+const int echoPin = 14;
+
+//define sound velocity in cm/uS
+#define SOUND_VELOCITY 0.034
+#define CM_TO_INCH 0.393701
+#include <ESP8266WiFi.h>
+#include "ThingSpeak.h"
+#include <DHT.h>
+
+
+const char* ssid = "Alls";   // your network SSID (name) 
+const char* password = "lalalaka";   // your network password
+
+long duration;
+float distanceCm;
+float distanceInch;
+DHT dht;
+
+WiFiClient  client;
+
+unsigned long myChannelNumber = 1;
+const char * myWriteAPIKey = "FM5I0Y4QUOJM07P2";
+
+// Timer variables
+unsigned long lastTime = 0;
+unsigned long timerDelay = 30000;
+
+void setup() {
+   dht.setup(D1);   
+  Serial.begin(115200); // Starts the serial communication
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+ 
+  WiFi.mode(WIFI_STA);   
+  
+  ThingSpeak.begin(client);  // Initialize ThingSpeak
+}
+
+
+void loop() {
+  if ((millis() - lastTime) > timerDelay) {
+}
+    
+    // Connect or reconnect to WiFi
+    if(WiFi.status() != WL_CONNECTED){
+      Serial.print("Attempting to connect");
+      while(WiFi.status() != WL_CONNECTED){
+        WiFi.begin(ssid, password); 
+        delay(5000);     
+      } 
+      Serial.println("\nConnected.");
+    }
+     // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+   // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Calculate the distance
+  distanceCm = duration * SOUND_VELOCITY/2;
+  
+  // Convert to inches
+  distanceInch = distanceCm * CM_TO_INCH;
+  
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance (cm): ");
+  Serial.println(distanceCm);
+  Serial.print("Distance (inch): ");
+  Serial.println(distanceInch);
+ float humidity = dht.getHumidity();/* Get humidity value */
+  float temperature = dht.getTemperature();/* Get temperature value */
+   Serial.print("Humidity is: ");
+  Serial.println(humidity, 1);
+Serial.print("Temperature is: ");
+Serial.println(temperature, 1);
+  Serial.print("\t\t");
+
+  if(distanceCm < 300)
+  Serial.println("Sir is available");
+  if(distanceCm > 300)
+  Serial.println("Sir is not available");
+  delay(1000);
+   // set the fields with the values
+    ThingSpeak.setField(1, distanceCm);
+    //ThingSpeak.setField(1, temperatureF);
+    ThingSpeak.setField(2, humidity);
+    ThingSpeak.setField(3, temperature);
+
+      int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+      if(x == 200){
+      Serial.println("Channel update successful.");
+    }
+    else{
+      Serial.println("Problem updating channel. HTTP error code " + String(x));
+    }
+    lastTime = millis();
+}
